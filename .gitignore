@@ -1,5 +1,4 @@
 Frontend/
-shared/
 .vscode/
 docker-compose.yml
 .dockerignore
