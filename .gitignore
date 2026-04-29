@@ -1,0 +1,11 @@
+Frontend/
+shared/
+.vscode/
+docker-compose.yml
+.dockerignore
+.env.docker
+README.md
+node_modules/
+dist/
+.env
+.DS_Store
