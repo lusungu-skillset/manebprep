@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+npm-debug.log
+pnpm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# Development
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+
+# Version control
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.test/
+coverage/
+.nyc_output/
+
+# Documentation
+*.md
+docs/
+
+# IDE
+*.swp
+*.swo
+*~
+.vscode-server/
+
+# Other
+.next/
+out/
+.turbo/
