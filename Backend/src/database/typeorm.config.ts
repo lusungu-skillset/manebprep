@@ -11,14 +11,14 @@ export function getTypeOrmConfig(): DataSourceOptions {
     type: 'postgres',
     url: process.env.DATABASE_URL,
     entities,
-    synchronize: true,
+    synchronize: process.env.NODE_ENV !== 'production', // false in production
 
     // ✅ REQUIRED for Supabase
     ssl: {
       rejectUnauthorized: false,
     },
 
-    logging: ['error'],
+    logging: process.env.NODE_ENV === 'production' ? ['error'] : ['error', 'warn'],
 
     extra: {
       ssl: {

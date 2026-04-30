@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  # NestJS Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    container_name: manebprep_backend
+    env_file:
+      - .env.docker
+   
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      FRONTEND_URL: http://localhost:3000
+      # Force IPv4 DNS resolution at multiple levels to prevent ENETUNREACH errors
+      # This is critical for connecting to cloud databases (Supabase, etc.)
+      NODE_OPTIONS: "--dns-result-order=ipv4first"
+    ports:
+      - '5000:5000'
+    # Use explicit DNS servers that support IPv4 resolution
+    dns:
+      - 8.8.8.8      # Google DNS (IPv4)
+      - 8.8.4.4      # Google DNS secondary
+      - 1.1.1.1      # Cloudflare DNS
+    # Disable IPv6 in the container to prevent routing issues
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+      - net.ipv6.conf.lo.disable_ipv6=1
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:5000/api/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - manebprep_network
+    restart: unless-stopped
+
+networks:
+  manebprep_network:
+    driver: bridge
+    driver_opts:
+      # Disable IPv6 to prevent routing issues with cloud databases
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+    ipam:
+      config:
+        # IPv4-only network to ensure all traffic uses IPv4
+        - subnet: 172.20.0.0/16

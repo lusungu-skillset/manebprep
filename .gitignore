@@ -1,6 +1,5 @@
 Frontend/
 .vscode/
-docker-compose.yml
 .dockerignore
 .env.docker
 README.md

@@ -17,8 +17,6 @@ function getCorsOriginConfig(): true | string[] {
     return frontendUrl;
   }
 
-  // Default to permissive CORS in local/dev setups so the Next.js frontend
-  // can reach the API even when FRONTEND_URL has not been configured yet.
   return true;
 }
 
