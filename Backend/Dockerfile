@@ -3,16 +3,20 @@
 # -------------------------------
 FROM node:20-alpine AS builder
 
-WORKDIR /build
+WORKDIR /app
 
-COPY Backend/package*.json ./Backend/
-RUN cd Backend && npm ci
+# Copy package files
+COPY package*.json ./
 
-COPY shared/ ./shared/
-COPY Backend/ ./Backend/
+# Install all dependencies (including dev)
+RUN npm ci
 
-WORKDIR /build/Backend
+# Copy entire project (including shared/)
+COPY . .
+
+# Build the app
 RUN npm run build
+
 
 # -------------------------------
 # Stage 2: Runtime
@@ -21,20 +25,30 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install dumb-init
 RUN apk add --no-cache dumb-init
 
-COPY Backend/package*.json ./
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
 RUN npm ci --omit=dev
 
-COPY --from=builder /build/Backend/dist ./dist
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
 
+# Create non-root user
 RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
 USER nodejs
 
+# Environment settings
 ENV NODE_OPTIONS="--dns-result-order=ipv4first"
 
+# Expose port (Render will override)
 EXPOSE 3000
 
+# Start container safely
 ENTRYPOINT ["dumb-init", "--"]
 
+# Start app
 CMD ["node", "dist/main.js"]

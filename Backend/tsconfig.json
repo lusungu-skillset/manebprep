@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@shared/*": [
-        "../shared/*"
+        "shared/*"
       ]
     },
     "moduleResolution": "node",
@@ -25,7 +25,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "../shared/**/*.d.ts"
+    "shared/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
