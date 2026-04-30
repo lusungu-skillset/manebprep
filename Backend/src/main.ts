@@ -40,7 +40,7 @@ async function bootstrap(): Promise<void> {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  const port = Number(process.env.PORT ?? 5000);
+  const port = Number((process.env.PORT) || 3000);
 
   await app.listen(port);
 
